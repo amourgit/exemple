@@ -1,0 +1,103 @@
+body{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav{
+    background-color: white;
+    box-shadow: 2px 1px 5px black ;
+    width: 100%;
+    height: auto;
+    padding: 5px;
+    margin:0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+nav img{
+    width: 30px;
+    height: 30px;
+}
+
+nav form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    width: auto;
+}
+
+nav form input.search-field{
+    background-color: rgb(243, 237, 237);
+    color: rgb(5, 0, 0);
+    font-size: 0.9rem;
+    border: 0;
+    padding: 5px;
+    padding-left: 15px;
+    width: 300px;
+    border-radius: 2px;
+}
+
+nav .info_connexion{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    padding-right: 15px;
+}
+
+nav .info_connexion img{
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 50%;
+    border: 1.5px solid green;
+}
+
+nav .info_connexion hr{
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 15px;
+    height: 1px;
+    rotate: 90deg;
+    background-color: rgb(104, 79, 79);
+    border: 0;
+}
+
+.navigation{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: white;
+    width: 15%;
+    min-width: 100px;
+    height: 100%;
+    padding-top: 100px;
+    height: 100vh;
+    border: 0;
+    border-right: 1.5px solid rgb(230, 221, 221);
+}
+
+.navigation ul.list-navigation{
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    justify-content: flex-start;
+}

@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de Connexion</title>
+    <link rel="stylesheet" href="{% static 'css/connexion.css' %}">
+</head>
+<body>
+    <div class="admin-button">
+        <a href="/admin" class="admin-link">Je suis un Administrateur</a>
+    </div>
+    <div class="container">
+        <div class="login-box">
+            <h2>Connexion</h2>
+            <form id="loginForm" method="post" action=".">
+                {% csrf_token %}
+                <div class="textbox">
+                    <input type="text" placeholder="Nom d'utilisateur" id="username" required name='username'>
+                </div>
+                <div class="textbox">
+                    <input type="password" placeholder="Mot de passe" id="password" required name='password'>
+                    <span id="togglePassword" class="toggle-password">👁️</span>
+                </div>
+                <button type="submit" class="btn">Se connecter</button>
+            </form>
+            <span class="error_connexion">{{ message }}</span>
+        </div>
+    </div>
+    <script src="{% static 'js/connexion.js' %}"></script>
+</body>
+</html>

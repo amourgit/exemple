@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block sheet %} {% endblock sheet %}
+    {% block title %}<title>Base</title>{% endblock title %}
+</head>
+<body>
+
+    <nav>
+        <img src="{% static 'images/OIP.JPEG'%}" alt="">
+        <div class="rech">
+            <form action="" method="get">
+                <input type="search" name="" id="" class="search-field" placeholder="Rechercher ici...">
+            </form>
+        </div>
+        <div class="info_connexion">
+            <hr>
+            <span class="user">Bienvenue Mr/M {{ request.user }} </span>
+            <img src="{% static 'images/profil.png'%}" alt="" class="icon">
+            <a href="#" class="connexion">Deconnexion</a>
+        </div>
+    </nav>
+
+    <div class="navigation">
+        <ul class="list-navigation">
+            <li class="item-nav"><a href="#">DashBord</a></li>
+            <li class="item-nav"><a href="#">Mouvement</a></li>
+            <li class="item-nav"><a href="#">Gestionnaire de Stock</a></li>
+            <li class="item-nav"><a href="#">Historique de Mouvement</a></li>
+            <li class="item-nav"><a href="#">Bon de Commande</a></li>
+            <li class="item-nav"><a href="#">Statistique</a></li>
+        </ul>
+    </div>
+
+    <div class="center-content">
+        {% block onglet_global %}
+    
+        {% endblock onglet_global %}
+    </div>
+    
+</body>
+</html>

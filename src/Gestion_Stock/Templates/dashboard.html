@@ -1,0 +1,381 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Articles</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <a href="#" style="display: none;" id="lien_mere">{{ lien_mere }}</a>
+    <div class="loader"></div>
+
+
+    <!-- Sidebar -->
+    <div class="flex">
+        <div class="bg-white w-64 min-h-screen shadow-md">
+            <div class="p-6 text-xl font-semibold text-gray-800">Gestion des Articles</div>
+            <ul>
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" data-tab="dashboard">
+                        <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="entrees">
+                        <i class="fas fa-truck-loading mr-2"></i> Entrées
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="sorties">
+                        <i class="fas fa-warehouse mr-2"></i> Sorties
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="historique">
+                        <i class="fas fa-history mr-2"></i> Historique de Mouvement
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link relative" data-tab="bon_commande">Bon de Commande
+                        <span id="commande-notification" class="bg-red-500 text-white rounded-full px-2 absolute top-0 right-0">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin" class="relative">Administration
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow p-6">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Dashboard</h2>
+                {% if user %}
+                    <span class="p-4 text-l font-semibold text-gray-800 absolute right-11 top-2">
+                        {{user}}  <a href="/deconnexion" class="bg-red-500 p-2 text-white deconnexion">Se Deconnecter</a>
+                    </span>
+                {% endif %}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md flex items-center">
+                        <div class="bg-green-500 p-4 rounded-full text-white">
+                            <i class="fas fa-arrow-up text-3xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-xl font-medium text-gray-700">Total des Entrées</h3>
+                            <p id="total-entrees" class="text-3xl font-semibold text-green-500 mt-2">0</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md flex items-center">
+                        <div class="bg-red-500 p-4 rounded-full text-white">
+                            <i class="fas fa-arrow-down text-3xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-xl font-medium text-gray-700">Total des Sorties</h3>
+                            <p id="total-sorties" class="text-3xl font-semibold text-red-500 mt-2">0</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md flex items-center">
+                        <div class="bg-blue-500 p-4 rounded-full text-white">
+                            <i class="fas fa-boxes text-3xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-xl font-medium text-gray-700" id="liste-article">Total en Stock</h3>
+                            <p id="total-stock" class="text-3xl font-semibold text-blue-500 mt-2">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <h3 class="text-xl font-medium text-gray-700 mb-4">Liste des Articles</h3>
+                    <table class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden">
+                        <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th class="py-2 px-4">Catégorie</th>
+                                <th class="py-2 px-4">Libellé</th>
+                                <th class="py-2 px-4">Quantité en Stock</th>
+                                <th class="py-2 px-4">Description</th>
+                                <th class="py-2 px-4">Date de Creation</th>
+                                <th class="py-2 px-4">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="article-list">
+                            {% for article in list_article %}
+                                <tr>
+                                    <td class="py-2 px-4">{{ article.id_categorie }}</td>
+                                    <td class="py-2 px-4">{{ article.libelle }}</td>
+                                    <td class="py-2 px-4">{{ article.quantite }}</td>
+                                    <td class="py-2 px-4">{{ article.description }}</td>
+                                    <td class="py-2 px-4">{{ article.date_created }}</td>
+                                    <td class="py-2 px-4">
+                                        {% if article.quantite <= 5 %}
+                                            <center class="no">Critique !</center>
+                                        {% elif article.quantite <= 10 %}
+                                            <center class="yes-no">Alerte !</center>
+                                        {% else %}
+                                            <center class="yes">OK</center>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Entrées Tab -->
+            <div class="tab-content hidden" id="entrees">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Entrées</h2>
+                {% if user %}
+                    <span class="p-4 text-l font-semibold text-gray-800 absolute right-11 top-2">
+                        {{user}}  <a href="/deconnexion" class="bg-red-500 p-2 text-white deconnexion">Se Deconnecter</a>
+                    </span>
+                {% endif %}
+                <button id="ajouter-entree-btn" class="bg-blue-500 text-white px-4 py-2 rounded flex items-center">
+                    <i class="fas fa-plus mr-2"></i> Ajouter une entrée
+                </button>
+                <div class="mt-8">
+                    <h3 class="text-xl font-medium text-gray-700 mb-4">Liste des Entrées</h3>
+                        <table class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden">
+                                <thead class="bg-gray-800 text-white">
+                                    <tr>
+                                        <th class="py-2 px-4">Article</th>
+                                        <th class="py-2 px-4">Quantité</th>
+                                        <th class="py-2 px-4">Auteur</th>
+                                        <th class="py-2 px-4">Motif</th>
+                                        <th class="py-2 px-4">Date</th>
+                                        <th class="py-2 px-4">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="liste-entrees">
+                                    {% for entree in list_entree %}
+                                        <tr class="t_entree">
+                                            <td class="py-2 px-4">{{ entree.id_article }}</td>
+                                            <td class="py-2 px-4"><center>{{ entree.quantite }}</center></td>
+                                            <td class="py-2 px-4">
+                                                {% if entree.id_user == request.user%}
+                                                Moi
+                                                {% else %}
+                                                {{ entree.id_user }}
+                                                {% endif %}
+                                            </td>
+                                            <td class="py-2 px-4">{{ entree.motif }}</td>
+                                            <td class="py-2 px-4">{{ entree.date_created }}</td>
+                                            <td class="py-2 px-4">
+                                                {% if entree.id_user == request.user %}
+                                                    <!--<a href="#" id="entree_modif">Modifier</a>-->
+                                                    <center><a href="/mouvement/{{ entree.id }}/delete" id="entree_sup">Annuler</a></center>
+                                                {% else %}
+                                                    <center>...</center>
+                                                {% endif %}
+                                                <a href="" class='hidden' id='id_entree'>{{ entree.id }}</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                        </table>
+                </div>
+            </div>
+
+            <!-- Sorties Tab -->
+            <div class="tab-content hidden" id="sorties">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Sorties</h2>
+                {% if user %}
+                    <span class="p-4 text-l font-semibold text-gray-800 absolute right-11 top-2">
+                        {{user}}  <a href="/deconnexion" class="bg-red-500 p-2 text-white deconnexion">Se Deconnecter</a>
+                    </span>
+                {% endif %}
+                <button id="ajouter-sortie-btn" class="bg-blue-500 text-white px-4 py-2 rounded flex items-center">
+                    <i class="fas fa-minus mr-2"></i> Ajouter une sortie
+                </button>
+                <div class="mt-8">
+                    <h3 class="text-xl font-medium text-gray-700 mb-4">Liste des Sorties</h3>
+                        <table class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden">
+                            <thead class="bg-gray-800 text-white">
+                                <tr>
+                                    <th class="py-2 px-4">Article</th>
+                                    <th class="py-2 px-4">Quantité</th>
+                                    <th class="py-2 px-4">Auteur</th>
+                                    <th class="py-2 px-4">Motif</th>
+                                    <th class="py-2 px-4">Date</th>
+                                    <th class="py-2 px-4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="liste-sorties">
+                                {% for sortie in list_sortie %}
+                                    <tr class="t_sortie">
+                                        <td class="py-2 px-4">{{ sortie.id_article }}</td>
+                                        <td class="py-2 px-4"><center>{{ sortie.quantite }}</center></td>
+                                        <td class="py-2 px-4">
+                                            {% if sortie.id_user == request.user%}
+                                            Moi
+                                            {% else %}
+                                            {{ sortie.id_user }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="py-2 px-4">{{ sortie.motif }}</td>
+                                        <td class="py-2 px-4">{{ sortie.date_created }}</td>
+                                        <td class="py-2 px-4">
+                                        {% if sortie.id_user == request.user %}
+                                            <!--<a href="#" id="sortie_modif">Modifier</a>-->
+                                            <center><a href="/mouvement/{{ sortie.id }}/delete" id="sortie_sup">Annuler</a></center>
+                                        {% else %}
+                                            <center>...</center>
+                                        {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+
+            <!-- Historique de Mouvement Tab -->
+            <div class="tab-content hidden" id="historique">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Historique de Mouvement</h2>
+                {% if user %}
+                    <span class="p-4 text-l font-semibold text-gray-800 absolute right-11 top-2">
+                        {{user}}  <a href="/deconnexion" class="bg-red-500 p-2 text-white deconnexion">Se Deconnecter</a>
+                    </span>
+                {% endif %}
+                <div class="flex mb-4">
+                    <!-- <input type="date" class="px-4 py-2 border rounded mr-4" id="filter-date"> -->
+                    <select id="filter-type" class="px-4 py-2 border rounded mr-4">
+                        <option value="">Tous les Types</option>
+                        <option value="entree">Entrée</option>
+                        <option value="sortie">Sortie</option>
+                    </select>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded ml-4" id="filter-btn">Filtrer</button>
+                </div>
+                <div class="flex justify-between mb-4">
+                    <h3 class="text-xl font-medium text-gray-700">Résultats du Filtre</h3>
+                    <p id="total-filtre" class="text-xl font-medium text-gray-700">Total: 0</p>
+                </div>
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden">
+                    <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="py-2 px-4">Mouvement</th>
+                            <th class="py-2 px-4">Article</th>
+                            <th class="py-2 px-4">Quantité</th>
+                            <th class="py-2 px-4">Auteur</th>
+                            <th class="py-2 px-4">Motif</th>
+                            <th class="py-2 px-4">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historique-mouvements">
+                        {% for mouv in list_mouv %}
+                            <tr>
+                                <td class="py-2 px-4">{{ mouv.type_mouvement }}</td>
+                                <td class="py-2 px-4">{{ mouv.id_article }}</td>
+                                <td class="py-2 px-4"><center>{{ mouv.quantite }}</center></td>
+                                <td class="py-2 px-4">
+                                    {% if mouv.id_user == request.user.username%}
+                                    Moi
+                                    {% else %}
+                                    {{ mouv.id_user }}
+                                    {% endif %}
+                                </td>
+                                <td class="py-2 px-4">{{ mouv.motif }}</td>
+                                <td class="py-2 px-4">{{ mouv.date_created }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Bon de Commande Tab -->
+            <div class="tab-content hidden" id="bon_commande">
+               <div class="flex justify-between">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">
+              Bon de Commande
+            </h2>
+            <button id="download-pdf-btn" class="bg-blue-500 text-white font-bold py-2 px-4 rounded flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="rgba(255,255,255,1)"><path d="M4 19H20V12H22V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V12H4V19ZM14 9H19L12 16L5 9H10V3H14V9Z"></path></svg>
+                Télécharger le bon de commande
+            </button>
+             <div class="p-4 text-l font-semibold text-gray-800">
+                        {{user}}  <a href="/deconnexion" class="bg-red-500 p-2 text-white deconnexion">Se Deconnecter</a>
+             </div>
+          </div>
+                {% if user %}
+                   
+                {% endif %}
+                {% if list_article %}
+                    <table class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden">
+                        <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th class="py-2 px-4">Categorie</th>
+                                <th class="py-2 px-4">Libelle</th>
+                                <th class="py-2 px-4">Quantité</th>
+                                <th class="py-2 px-4">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bon-commande">
+                            {% for article in list_article %}
+                                {% if article.quantite <= 10 %}
+                                    <tr class="no">
+                                        <td class="py-2 px-4">{{ article.id_categorie }}</td>
+                                        <td class="py-2 px-4">{{ article.libelle }}</td>
+                                        <td class="py-2 px-4"><center>{{ article.quantite }}</center></td>
+                                        <td class="py-2 px-4">{{ article.description }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <span>Aucune Commande en vue...</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modalEntreeSortie" class="modal-overlay fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg overflow-hidden shadow-xl w-96">
+            <div class="px-6 py-4 border-b">
+                <h3 class="text-xl font-medium text-gray-800" id="modalTitle">Ajouter une Entrée/Sortie</h3>
+            </div>
+            <div class="px-6 py-4">
+                <form id="entreeSortieForm" method="POST" action=".">
+                    {% csrf_token %}
+                    <div class="mb-4 hidden">
+                        <label for="type_mouvement" class="block text-gray-700">Quantité</label>
+                        <input type="text" id="type_mouvement" class="w-full px-4 py-2 border rounded" name="type_mouvement">
+                    </div>
+                    <div class="mb-4">
+                        <label for="libelle" class="block text-gray-700">Libellé</label>
+                        <select id="libelle" class="w-full px-4 py-2 border rounded" name="libelle" required>
+                            {% for article in list_article %}
+                                <option value="{{ article.libelle }}">{{ article.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="quantite" class="block text-gray-700">Quantité</label>
+                        <input type="number" id="quantite" class="w-full px-4 py-2 border rounded" name="quantite" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="motif" class="block text-gray-700">Motif</label>
+                        <textarea id="motif" class="w-full px-4 py-2 border rounded" name="motif" required></textarea>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="button" id="cancelBtn" class="bg-red-500 text-white px-4 py-2 rounded mr-2">Annuler</button>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
+    <script src="{% static 'js/dash.js' %}"></script>
+</body>
+</html>

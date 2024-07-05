@@ -1,0 +1,106 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    background: #ffffff;
+    padding: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.textbox {
+    margin-bottom: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.textbox input {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px; /* space for the toggle icon */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #5cb85c;
+    color: white;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #4cae4c;
+}
+
+.admin-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.admin-link {
+    text-decoration: none;
+    color: #5cb85c;
+    font-weight: bold;
+}
+
+
+.admin-link:hover {
+    color: #4cae4c;
+}
+
+
+.deconnexion{
+    padding: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    background-color: rgb(235, 232, 232);
+    border: 2px red solid ;
+    margin-left: 15px;
+    z-index: 111;
+}
+
+.error_connexion{
+    width: 100%;
+    padding: 5px;
+    color: red;
+    margin-top: 15px;
+    background-color: white;
+}
